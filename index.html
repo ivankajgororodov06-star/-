@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портал mos.ru — «ВЕРТИКАЛЬ»</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            padding: 40px 45px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e6e9ee;
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: #0066b3;
+            color: #fff;
+            font-weight: 700;
+            font-size: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1f2b;
+        }
+
+        .logo-text span {
+            color: #0066b3;
+        }
+
+        .user-badge {
+            background: #f0f4fe;
+            color: #0066b3;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-badge::before {
+            content: "👤";
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: #5a6879;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb span {
+            color: #0066b3;
+            font-weight: 500;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1f2b;
+            margin-bottom: 6px;
+        }
+
+        .page-title .project-name {
+            color: #0066b3;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #5a6879;
+            margin-bottom: 30px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #e6f7e6;
+            color: #1e7e34;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 4px 16px;
+            border-radius: 30px;
+            margin-bottom: 18px;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 35px;
+            position: relative;
+        }
+
+        .progress-container::before {
+            content: "";
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: #d6dae2;
+            z-index: 0;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            gap: 8px;
+            width: 70px;
+        }
+
+        .progress-step .circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #d6dae2;
+            color: #5a6879;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .progress-step.active .circle {
+            background: #0066b3;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 102, 179, 0.35);
+        }
+
+        .progress-step.completed .circle {
+            background: #1e7e34;
+            color: #fff;
+        }
+
+        .progress-step .label {
+            font-size: 11px;
+            color: #5a6879;
+            text-align: center;
+            line-height: 1.3;
+            font-weight: 500;
+        }
+
+        .progress-step.active .label {
+            color: #1a1f2b;
+            font-weight: 700;
+        }
+
+        .section {
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            border: 1px solid #e6e9ee;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1f2b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .badge {
+            background: #0066b3;
+            color: #fff;
+            font-size: 12px;
+            padding: 0 12px;
+            border-radius: 30px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: #5a6879;
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px 28px;
+            margin-bottom: 16px;
+        }
+
+        .form-row.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d3546;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #8a96a8;
+            font-weight: 400;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            border: 1.5px solid #d6dae2;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fff;
+            transition: 0.25s;
+            width: 100%;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0066b3;
+            box-shadow: 0 0 0 3px rgba(0, 102, 179, 0.15);
+        }
+
+        .form-group .value {
+            background: #f0f2f5;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1a1f2b;
+            border: 1.5px solid #e6e9ee;
+        }
+
+        .form-group .required {
+            color: #d32f2f;
+            margin-left: 2px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group label {
+            font-weight: 400;
+            font-size: 14px;
+            color: #2d3546;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"],
+        .checkbox-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0066b3;
+            cursor: pointer;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 34px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #0066b3;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #00529b;
+            box-shadow: 0 4px 16px rgba(0, 102, 179, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #e6e9ee;
+            color: #2d3546;
+        }
+
+        .btn-secondary:hover {
+            background: #d6dae2;
+        }
+
+        .btn-success {
+            background: #1e7e34;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #166a2b;
+            box-shadow: 0 4px 16px rgba(30, 126, 52, 0.35);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #0066b3;
+            color: #0066b3;
+        }
+
+        .btn-outline:hover {
+            background: #e6f0fe;
+        }
+
+        .info-box {
+            background: #e6f0fe;
+            border-left: 4px solid #0066b3;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1a1f2b;
+            margin-bottom: 18px;
+        }
+
+        .info-box strong {
+            color: #0066b3;
+        }
+
+        .success-box {
+            background: #e6f7e6;
+            border-left: 4px solid #1e7e34;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1a1f2b;
+            margin-bottom: 18px;
+        }
+
+        .success-box strong {
+            color: #1e7e34;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .table-wrap th {
+            background: #e6e9ee;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: #1a1f2b;
+        }
+
+        .table-wrap td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e6e9ee;
+        }
+
+        .table-wrap .highlight {
+            background: #f8f9fc;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 18px;
+            border-top: 1px solid #e6e9ee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #8a96a8;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer a {
+            color: #0066b3;
+            text-decoration: none;
+        }
+
+        .vertical-badge {
+            background: #0066b3;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 4px 20px;
+            border-radius: 30px;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 20px 16px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .progress-container {
+                flex-wrap: nowrap;
+                gap: 0;
+                overflow-x: auto;
+            }
+            .progress-step {
+                width: 60px;
+                flex-shrink: 0;
+            }
+            .progress-step .label {
+                font-size: 9px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+
+        .qr-placeholder {
+            background: #f8f9fc;
+            border: 2px dashed #d6dae2;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .qr-placeholder .qr-icon {
+            font-size: 72px;
+            margin-bottom: 6px;
+        }
+
+        .qr-placeholder .qr-text {
+            color: #5a6879;
+            font-size: 14px;
+        }
+
+        .demo-tag {
+            background: #ff9800;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 12px;
+        }
+
+        .project-header-icon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Шапка портала -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">М</div>
+                <div class="logo-text">mos.<span>ru</span></div>
+            </div>
+            <div class="user-badge">Иванов И.И.</div>
+        </div>
+
+        <!-- Хлебные крошки -->
+        <div class="breadcrumb">
+            Главная / Услуги / Социальная защита / <span>«ВЕРТИКАЛЬ»</span>
+        </div>
+
+        <!-- Заголовок -->
+        <div class="page-title">
+            <div class="project-header-icon">
+                <span class="vertical-badge">ВЕРТИКАЛЬ</span>
+                <span class="demo-tag">Демо-версия</span>
+            </div>
+        </div>
+        <div class="page-subtitle">
+            Ежемесячная компенсационная выплата на адаптацию жилья и повышение мобильности для раненого участника СВО
+        </div>
+
+        <div class="status-badge">● Пилотный проект</div>
+
+        <!-- Прогресс-бар -->
+        <div class="progress-container">
+            <div class="progress-step completed">
+                <div class="circle">✓</div>
+                <div class="label">Заявление</div>
+            </div>
+            <div class="progress-step active">
+                <div class="circle">2</div>
+                <div class="label">Проверка</div>
+            </div>
+            <div class="progress-step">
+                <div class="circle">3</div>
+                <div class="label">Обследование</div>
+            </div>
+            <div class="progress-step">
+                <div class="circle">4</div>
+                <div class="label">Сертификат</div>
+            </div>
+            <div class="progress-step">
+                <div class="circle">5</div>
+                <div class="label">Работы</div>
+            </div>
+            <div class="progress-step">
+                <div class="circle">6</div>
+                <div class="label">Завершение</div>
+            </div>
+        </div>
+
+        <!-- Уведомление -->
+        <div class="info-box">
+            <strong>📌 Проект «ВЕРТИКАЛЬ»</strong> — пилотный проект по адаптации частного жилого помещения для участников СВО с инвалидностью. Заполните форму, чтобы получить ежемесячную компенсационную выплату.
+        </div>
+
+        <!-- Раздел 1: Данные об участнике -->
+        <div class="section">
+            <div class="section-title">
+                <span>📋 1. Данные об участнике СВО</span>
+                <span class="badge">Обязательно</span>
+            </div>
+            <div class="section-desc">Укажите сведения о ветеране боевых действий, получившем ранение</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Фамилия, имя, отчество <span class="required">*</span></label>
+                    <div class="value">Иванов Иван Иванович</div>
+                </div>
+                <div class="form-group">
+                    <label>Дата рождения <span class="required">*</span></label>
+                    <div class="value">15.03.1985</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Удостоверение ветерана боевых действий <span class="required">*</span></label>
+                    <div class="value">Серия ВБ № 123456</div>
+                </div>
+                <div class="form-group">
+                    <label>Справка об инвалидности (МСЭ) <span class="required">*</span></label>
+                    <div class="value">Серия МСЭ № 789012, II группа, военная травма</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Контактный телефон <span class="required">*</span></label>
+                    <div class="value">+7 (999) 123-45-67</div>
+                </div>
+                <div class="form-group">
+                    <label>Адрес электронной почты</label>
+                    <div class="value">i.ivanov@mail.ru</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Раздел 2: Данные о жилом помещении -->
+        <div class="section">
+            <div class="section-title">
+                <span>🏠 2. Данные о жилом помещении</span>
+                <span class="badge">Обязательно</span>
+            </div>
+            <div class="section-desc">Укажите адрес частного дома, где проживает участник СВО</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Адрес частного дома <span class="required">*</span></label>
+                    <div class="value">г. Москва, пос. Ново-Переделкино, ул. Сосновая, д. 5</div>
+                </div>
+                <div class="form-group">
+                    <label>Округ / Район <span class="required">*</span></label>
+                    <div class="value">ЗАО, район Ново-Переделкино</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Документ о праве собственности <span class="required">*</span></label>
+                    <div class="value">Свидетельство о гос. регистрации права № 77-АБ-123456</div>
+                </div>
+                <div class="form-group">
+                    <label>Площадь дома, этажность</label>
+                    <div class="value">85 кв. м, 2 этажа</div>
+                </div>
+            </div>
+
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Опишите проблемы, с которыми Вы сталкиваетесь</label>
+                    <div class="value">Узкие дверные проёмы (65 см), отсутствие пандуса на крыльце, нет поручней в ванной, скользкий пол в прихожей</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Раздел 3: Медицинские показания -->
+        <div class="section">
+            <div class="section-title">
+                <span>🏥 3. Медицинские показания</span>
+                <span class="badge">Обязательно</span>
+            </div>
+            <div class="section-desc">Рекомендации по адаптации жилого помещения из индивидуальной программы реабилитации</div>
+
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Рекомендации ИПРА <span class="required">*</span></label>
+                    <div class="value">Рекомендованы: пандус на входе, расширение дверных проёмов (гостиная, спальня, санузел), поручни в санузле, противоскользящее покрытие в прихожей</div>
+                </div>
+            </div>
+
+            <div class="checkbox-group" style="margin-top: 12px;">
+                <label>
+                    <input type="checkbox" checked disabled>
+                    Согласен на выезд специалиста для обследования жилого помещения
+                </label>
+            </div>
+        </div>
+
+        <!-- Раздел 4: План адаптации -->
+        <div class="section">
+            <div class="section-title">
+                <span>🔧 4. План адаптации (проект)</span>
+                <span class="badge" style="background:#1e7e34;">Сформирован</span>
+            </div>
+            <div class="section-desc">Перечень работ, утверждённых комиссией в рамках проекта «ВЕРТИКАЛЬ»</div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Вид работы</th>
+                            <th>Стоимость</th>
+                            <th>Подрядчик</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Расширение дверного проёма (гостиная)</td>
+                            <td>30 000 ₽</td>
+                            <td>ООО «Доступная среда»</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Расширение дверного проёма (санузел)</td>
+                            <td>30 000 ₽</td>
+                            <td>ООО «Доступная среда»</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Установка складного пандуса с перилами</td>
+                            <td>27 882 ₽</td>
+                            <td>ООО «Пандус-Строй»</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Установка поручней (4 точки)</td>
+                            <td>6 000 ₽</td>
+                            <td>ООО «Инва-Пандус»</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Противоскользящее покрытие (6 м²)</td>
+                            <td>5 790 ₽</td>
+                            <td>ООО «Адаптация-М»</td>
+                        </tr>
+                        <tr style="font-weight:700; background:#f0f4fe;">
+                            <td colspan="2">Итого</td>
+                            <td>99 672 ₽</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="success-box" style="margin-top: 14px;">
+                <strong>✅ План работ утверждён</strong> — вы можете приступить к выполнению работ по проекту «ВЕРТИКАЛЬ»
+            </div>
+        </div>
+
+        <!-- Раздел 5: Сертификат -->
+        <div class="section" style="border-color: #1e7e34;">
+            <div class="section-title">
+                <span>📜 5. Сертификат «ВЕРТИКАЛЬ»</span>
+                <span class="badge" style="background:#1e7e34;">Выдан</span>
+            </div>
+            <div class="section-desc">
+                Сертификат подтверждает право на бесплатную адаптацию жилого помещения.<br>
+                <strong>Срок действия:</strong> 12 месяцев (до 18.06.2027)
+            </div>
+
+            <div class="info-box" style="background:#f0f4fe; border-left-color: #1e7e34;">
+                <strong>Сертификат «ВЕРТИКАЛЬ» № ВР-2026-001</strong><br>
+                ФИО: Иванов Иван Иванович<br>
+                Адрес: г. Москва, пос. Ново-Переделкино, ул. Сосновая, д. 5<br>
+                Виды работ: расширение дверных проёмов (2 шт.), установка пандуса, поручни (4 шт.), противоскользящее покрытие (6 м²)<br>
+                <span style="color:#0066b3; font-weight:600;">Ежемесячная компенсационная выплата: 15 000 ₽ × 12 мес. = 180 000 ₽</span>
+            </div>
+
+            <!-- QR-код для демонстрации -->
+            <div class="qr-placeholder">
+                <div class="qr-icon">📱</div>
+                <div class="qr-text">
+                    <strong>QR-код для отслеживания статуса</strong><br>
+                    Отсканируйте, чтобы проверить ход выполнения работ по проекту «ВЕРТИКАЛЬ»<br>
+                    <span style="font-size:12px; color:#8a96a8;">(в демо-версии используется тестовый QR-код)</span>
+                </div>
+                <div style="background:#fff; border:1px solid #d6dae2; border-radius:8px; padding:12px; display:inline-block; margin-top:10px;">
+                    <span style="font-family:monospace; font-size:18px; letter-spacing:2px;">■■■■ ■■■■ ■■■■ ■■■■</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки -->
+        <div class="btn-group">
+            <button class="btn btn-secondary">← Назад</button>
+            <button class="btn btn-success">✅ Скачать сертификат</button>
+            <button class="btn btn-primary">Далее →</button>
+        </div>
+
+        <!-- Футер -->
+        <div class="footer">
+            <span>© 2026 Портал Мэра и Правительства Москвы — Проект «ВЕРТИКАЛЬ»</span>
+            <span>
+                <a href="#">Помощь</a> · <a href="#">Политика обработки данных</a>
+            </span>
+        </div>
+
+    </div>
+
+</body>
+</html>
